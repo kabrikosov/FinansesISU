@@ -29,10 +29,10 @@ class FinanceCircle extends React.Component {
             statistics: [],
             options: {
                 'title': '',
-                'width': 400,
+                'width': 450,
                 'height': 300,
                 'backgroundColor': 'transparent',
-                chartArea: {left: 0, top: 0, width: "100%", height: "100%"}
+                chartArea: {left: "3%", top: "3%", width: "100%", height: "100%"}
             }
         };
     }
