@@ -1,6 +1,6 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
-const chart = require("react-google-charts")
+import ReactDOM from 'react-dom'
+import React from 'react'
+import {Chart} from "react-google-charts";
 
 class App extends React.Component {
 
@@ -68,7 +68,7 @@ class FinanceCircle extends React.Component {
                          alt="next month" id="next-month"/>
                 </div>
                 <div className="finance-circle">
-                    <chart.Chart
+                    <Chart
                         chartType="PieChart"
                         data={[["Age", "Weight"], [4, 5.5], [8, 12]]}
                         options = {{
