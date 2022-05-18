@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"></head>
+<body>
+<!--/*@thymesVar id="cat" type="ru.isu.model.Category"*/-->
+<div th:fragment="category(categories, hidden)"
+     th:each="cat : ${categories}" th:class="'category'"
+     th:classappend="|${!cat.getChildCategories().isEmpty() ? 'category--list' : ''} ${hidden ? 'category--hidden' : ''}|">
+    <div class="category__name">
+        <a th:href="@{/categories/{id}(id = ${cat.getId()})}" th:text="${cat.getName()}"></a>
+        <img th:if="${!cat.getChildCategories().isEmpty()}" class="arrow" th:src="@{/resources/img/arrow.svg}">
+    </div>
+    <div th:each="nestCat : ${cat.getChildCategories()}" th:remove="tag">
+        <div th:replace="all_categories :: category(${nestCat}, ${true})" th:class="'category--hidden'"></div>
+    </div>
+</div>
+<div class="wrapper">
+    <div th:replace="header :: navigation"></div>
+    <div class="menu">
+        <div class="menu__head">
+            <h1 th:text=" #{categories}"></h1>
+        </div>
+        <div class="menu__content">
+            <div class="content__categories">
+                <div th:each="cat : ${categoryList}" th:if="${cat.getParentCategory() == null}"
+                     th:include="this :: category(${cat}, ${false})"
+                     th:classappend="${!cat.getChildCategories().isEmpty()} ? 'category category--list' : 'category'"
+                     ></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script defer>
+    Array.from(document.getElementsByClassName("category--list"))
+        .forEach(list => list.children[0].children[1].addEventListener('click', ev =>
+                Array.from(list.children)
+                    .filter(el => el.classList.contains('category'))
+                    .forEach(addRemoveHiddenClass)
+            )
+        )
+
+    function addRemoveHiddenClass(el) {
+        if (el.classList.contains('category--hidden')) {
+            el.classList.remove('category--hidden')
+            el.parentElement.children[0].children[1].classList.add('dropdownArrow--reversed');
+        }
+        else {
+            el.classList.add('category--hidden');
+            el.parentElement.children[0].children[1].classList.remove('dropdownArrow--reversed');
+        }
+    }
+</script>
+</body>
+</html>

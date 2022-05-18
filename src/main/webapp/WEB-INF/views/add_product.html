@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../views/header :: head"></head>
+<body>
+<div class="wrapper">
+    <div th:replace="../views/header :: navigation"></div>
+    <div class="menu">
+        <div class="menu__head">
+            <h2 th:text="|#{add} #{products}|"></h2>
+        </div>
+        <div class="menu__content">
+            <div class="content__add-form">
+                <form action="/products/add" method="post" th:object="${product}">
+                    <div class="form__field">
+                        <label for="name" th:text="#{model.name}"></label>
+                        <input id="name" type="text" th:field="${product.name}">
+                        <span th:if="${#fields.hasErrors('name')}">
+                            <span th:each="err: ${#fields.errors('name')}" th:text="${err}"
+                                  class="text-danger">
+                            </span>
+                        </span>
+                    </div>
+                    <div class="form__field">
+                        <label for="quantity" th:text="#{model.quantity}"></label>
+                        <input id="quantity" type="number" th:field="${product.quantity}">
+                        <span th:if="${#fields.hasErrors('quantity')}">
+                            <span th:each="err: ${#fields.errors('quantity')}"
+                                  th:text="${err}"
+                                  class="text-danger">
+                            </span>
+                        </span>
+                    </div>
+                    <div class="form__field">
+                        <label for="price" th:text="#{model.price}"></label>
+                        <input id="price" type="number" th:field="${product.price}">
+                        <span th:if="${#fields.hasErrors('price')}">
+                            <span th:each="err: ${#fields.errors('price')}" th:text="${err}"
+                                  class="text-danger">
+                            </span>
+                        </span>
+                    </div>
+                    <div class="form__field">
+                        <label for="date" th:text="#{model.date}"></label>
+                        <input id="date" type="datetime-local" th:field="${product.date}"
+                               th:value="${product.getStringDate(product.getDate())}">
+                        <span th:if="${#fields.hasErrors('date')}">
+                            <span th:each="err: ${#fields.errors('date')}" th:text="${err}"
+                                  class="text-danger">
+                            </span>
+                        </span>
+                    </div>
+                    <div class="form__field">
+                        <label for="category" th:text="#{model.category}"></label>
+                        <select id="category" th:field="${product.category}">
+                            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                        </select>
+                        <span th:if="${#fields.hasErrors('category')}">
+                            <span th:each="err: ${#fields.errors('category')}"
+                                  th:text="${err}"
+                                  class="text-danger">
+                            </span>
+                        </span>
+                    </div>
+                    <button class="form__submit-button" type="submit" th:text="#{forms.submit}"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

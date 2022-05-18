@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../views/header :: head"></head>
+<body>
+<div class="wrapper">
+    <div th:replace="../views/header :: navigation"></div>
+    <div class="menu">
+        <div class="menu__head">
+            <h2 th:text="|#{add} #{subscriptions}|"></h2>
+        </div>
+        <div class="menu__content">
+            <div class="content__add-form">
+                <form action="/subscriptions/add" method="post" th:object="${subscription}">
+                    <div class="form__field">
+                        <label for="name" th:text="#{model.name}"></label>
+                        <input id="name" type="text" th:field="${subscription.name}">
+                        <span th:if="${#fields.hasErrors('name')}">
+                            <span th:each="err: ${#fields.errors('name')}" th:text="${err}"
+                                  class="text-danger">
+                            </span>
+                        </span>
+                    </div>
+                    <div class="form__field">
+                        <label for="startDateTime" th:text="#{model.startDate}"></label>
+                        <input id="startDateTime" type="datetime-local" th:field="${subscription.startDateTime}"
+                               th:value="${subscription.getStringDate(subscription.startDateTime)}">
+                        <span th:if="${#fields.hasErrors('startDateTime')}">
+                            <span th:each="err: ${#fields.errors('startDateTime')}" th:text="${err}"
+                                  class="text-danger">
+                            </span>
+                        </span>
+                    </div>
+                    <div class="form__field">
+                        <label for="expirationDateTime" th:text="#{model.expirationDate}"></label>
+                        <input id="expirationDateTime" type="datetime-local" th:field="${subscription.expirationDateTime}">
+                    </div>
+                    <span th:if="${#fields.hasErrors('expirationDateTime')}">
+                            <span th:each="err: ${#fields.errors('expirationDateTime')}" th:text="${err}"
+                                  class="text-danger">
+                            </span>
+                    </span>
+                    <button class="form__submit-button" type="submit" th:text="#{forms.submit}"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

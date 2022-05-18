@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../views/header :: head"/>
+<body>
+<div class="wrapper">
+    <div th:replace="../views/header :: navigation"></div>
+    <div class="menu">
+        <div class="menu__head">
+            <h1 th:text=" #{products}"></h1>
+        </div>
+        <div id="menu__content" class="menu__content">
+            <div class="finance-circle__wrapper" id="finance-circle">
+                <div class="finance-circle__head">
+                    <img class="arrow arrow--finance-previous-month" th:src="@{/resources/img/arrow.svg}"
+                         alt="previous month" id="previous-month"/>
+                    <span class="finance-circle__month" id="finance-circle__month"
+                          th:text="|${#calendars.format(#calendars.createNow(), 'MMM')} ${#calendars.format(#calendars.createNow(), 'yyyy')}|"></span>
+                    <img class="arrow arrow--finance-next-month" th:src="@{/resources/img/arrow.svg}"
+                         alt="next month" id="next-month"/>
+                </div>
+                <div class="finance-circle">
+                    <div id="piechart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" defer charset="UTF-8" th:charset="UTF-8">
+    var date = new Date();
+    var loaded = [];
+    /*<![CDATA[*/
+    var lang = "[[${#locale}]]";
+    /*]]>*/
+
+    const monthNames = {
+        en: ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"],
+        ru: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+            "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+    };
+
+    document.getElementById('next-month').addEventListener('click', nextMonth)
+    document.getElementById('previous-month').addEventListener('click', previousMonth)
+
+    initialize();
+
+    function initialize() {
+
+        var requ = window.location.origin + "/api/statistics/sumGroup?start=" +
+            new Date(date.getFullYear(), date.getMonth(), 0).toISOString().substring(0, 10) +
+            "&end=" + new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().substring(0, 10);
+
+        google.charts.load('current', {'packages': ['corechart']});
+
+        axios
+            .get(requ)
+            .then(resp => {
+                loaded = resp.data;
+                loaded = loaded.map(el => [el['category']['name'], el['sum']]);
+                loaded.unshift(['Category', 'Money spent']);
+                google.charts.setOnLoadCallback(drawChart);
+            });
+    }
+
+    function drawChart(){
+
+        var data = google.visualization.arrayToDataTable(loaded);
+
+
+        // Optional; add a title and set the width and height of the chart
+        var options = {
+            'title':'',
+            'width':400,
+            'height':300,
+            'backgroundColor': 'transparent',
+            chartArea:{left:0,top:0,width:"100%",height:"100%"}
+            };
+
+        // Display the chart inside the <div> element with id="piechart"
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+    }
+
+    function nextMonth(ev){
+        date = new Date(date.getFullYear(), date.getMonth()+1, date.getDay())
+        document.getElementById("finance-circle__month").textContent = monthNames[lang][date.getMonth()] + " " + date.getFullYear();
+        initialize();
+    }
+
+    function previousMonth(ev){
+        date = new Date(date.getFullYear(), date.getMonth()-1, date.getDay())
+        document.getElementById("finance-circle__month").textContent = monthNames[lang][date.getMonth()] + " " + date.getFullYear();
+        initialize();
+    }
+
+</script>
+</body>
