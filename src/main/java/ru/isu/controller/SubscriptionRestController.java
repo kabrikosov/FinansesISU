@@ -23,12 +23,12 @@ public class SubscriptionRestController {
     }
 
     @GetMapping(value = {"/all", ""})
-    public @ResponseBody List<Subscription> viewAll(){
+    public List<Subscription> viewAll(){
         return repository.findAll();
     }
 
     @GetMapping("/{subscription}")
-    public @ResponseBody Subscription view(@PathVariable Subscription subscription){
+    public Subscription view(@PathVariable Subscription subscription){
         return subscription;
     }
 }

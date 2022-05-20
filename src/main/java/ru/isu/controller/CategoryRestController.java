@@ -28,7 +28,7 @@ public class CategoryRestController {
     }
 
     @GetMapping(value = {"/all", ""})
-    public @ResponseBody List<Category> viewAll(){
+    public List<Category> viewAll(){
         return repository.findAll();
     }
 
