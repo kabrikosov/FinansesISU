@@ -12,6 +12,7 @@ import ru.isu.model.Category;
 import ru.isu.model.Product;
 import ru.isu.repository.CategoryRepository;
 import ru.isu.repository.ProductRepository;
+import ru.isu.repository.SubscriptionRepository;
 import ru.isu.validator.ProductValidator;
 
 import javax.validation.Valid;
@@ -24,6 +25,9 @@ public class ProductController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     @InitBinder
     public void initBinder(WebDataBinder binder){
@@ -49,6 +53,7 @@ public class ProductController {
         var mv = new ModelAndView("add_product");
         mv.addObject("product", new Product());
         mv.addObject("categories", categoryRepository.findAll());
+        mv.addObject("subscriptions", subscriptionRepository.findAll());
         return mv;
     }
 
@@ -68,7 +73,7 @@ public class ProductController {
         }
     }
 
-    @RequestMapping("/product")
+    @RequestMapping(value = "/product")
     public String showNewProduct(
             @ModelAttribute("product") Product p,
             Model model) throws Exception {

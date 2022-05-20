@@ -27,12 +27,12 @@ public class ProductRestController {
     }
 
     @GetMapping(value = {"/all", ""})
-    public @ResponseBody List<Product> viewAll(){
+    public List<Product> viewAll(){
         return repository.findAll();
     }
 
     @GetMapping("/{product}")
-    public @ResponseBody Product view(@PathVariable Product product){
+    public Product view(@PathVariable Product product){
         return product;
     }
 

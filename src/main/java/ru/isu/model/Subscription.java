@@ -23,7 +23,7 @@ public class Subscription implements DateToStringConvertable {
 
     private String name;
 
-    @OneToMany(mappedBy = "subscription")
+    @OneToMany(mappedBy = "subscription", fetch = FetchType.EAGER)
     private List<Product> products;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")

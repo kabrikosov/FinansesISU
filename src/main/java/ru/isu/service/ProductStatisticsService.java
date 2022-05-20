@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-@Service("statisticsService")
-public class StatisticsService {
+@Service("productStatisticsService")
+public class ProductStatisticsService {
 
     @Autowired
     private ProductRepository productRepository;

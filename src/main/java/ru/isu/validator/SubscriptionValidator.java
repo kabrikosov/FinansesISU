@@ -19,7 +19,7 @@ public class SubscriptionValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "error.name.empty");
         if (s.getStartDateTime() == null)
             errors.rejectValue("startDateTime", "error.startDateTime.empty");
-        if (s.getExpirationDateTime().isBefore(s.getStartDateTime())){
+        if (s.getExpirationDateTime() != null && s.getExpirationDateTime().isBefore(s.getStartDateTime())){
             errors.rejectValue("expirationDateTime", "error.expirationDateTime.beforeStart");
         }
     }
