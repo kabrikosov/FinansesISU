@@ -635,7 +635,6 @@ input, select {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-left: 2em;
     align-items: center;
     background-color: #ffffff30;
     border-radius: 1em;
@@ -664,6 +663,8 @@ input, select {
 .finance-circle__month{
     text-transform: capitalize;
 }
-.finance-circle{
+
+.menu__content__wrapper{
     margin-top: 1em;
+    margin-left: 2em;
 }
