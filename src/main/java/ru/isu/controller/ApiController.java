@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.isu.model.Product;
+import ru.isu.model.Subscription;
 import ru.isu.projection.ProductAndSum;
 import ru.isu.projection.ProductSumGroupCategories;
-import ru.isu.projection.SubscriptionInfo;
 import ru.isu.service.ProductStatisticsService;
 import ru.isu.service.SubscriptionStatisticsService;
 
@@ -64,7 +64,7 @@ public class ApiController {
 
     @GetMapping("/statistics/subscriptions")
     public @ResponseBody
-    List<SubscriptionInfo> searchSubsBetweenLocalDate(
+    List<Subscription> searchSubsBetweenLocalDate(
             @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
             @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
     ){

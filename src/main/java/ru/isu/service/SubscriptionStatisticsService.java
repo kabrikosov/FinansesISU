@@ -2,7 +2,7 @@ package ru.isu.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.isu.projection.SubscriptionInfo;
+import ru.isu.model.Subscription;
 import ru.isu.repository.ProductRepository;
 import ru.isu.repository.SubscriptionRepository;
 
@@ -24,7 +24,7 @@ public class SubscriptionStatisticsService {
                 LocalDateTime.of(start, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX));
     }
 
-    public List<SubscriptionInfo> findSubscriptionsByDates(LocalDate start, LocalDate end){
+    public List<Subscription> findSubscriptionsByDates(LocalDate start, LocalDate end){
         return subscriptionRepository.findSubscriptionsByDates(LocalDateTime.of(start, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX));
     }
 
