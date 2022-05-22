@@ -3,6 +3,7 @@ package ru.isu.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.isu.model.Subscription;
+import ru.isu.projection.GrouppingSumProjection;
 import ru.isu.repository.ProductRepository;
 import ru.isu.repository.SubscriptionRepository;
 
@@ -28,6 +29,9 @@ public class SubscriptionStatisticsService {
         return subscriptionRepository.findSubscriptionsByDates(LocalDateTime.of(start, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX));
     }
 
+    public List<GrouppingSumProjection> findSubscriptionsSumGroupping(LocalDate start, LocalDate end){
+        return subscriptionRepository.findSubscriptionsSumGroupping(LocalDateTime.of(start, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX));
+    }
     /*
     public List<SubscriptionInfo> findSubscriptionsByStartDateTimeBeforeAndAndExpirationDateTimeAfter(LocalDate start, LocalDate end){
         return subscriptionRepository.findSubscriptionsByStartDateTimeBeforeAndAndExpirationDateTimeAfterOrStartDateTimeBeforeAndExpirationDateTimeIsNull(LocalDateTime.of(start, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX));

@@ -3,12 +3,10 @@ package ru.isu.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import ru.isu.model.Product;
 import ru.isu.model.Subscription;
+import ru.isu.projection.GrouppingSumProjection;
 import ru.isu.projection.ProductAndSum;
 import ru.isu.projection.ProductSumGroupCategories;
 import ru.isu.service.ProductStatisticsService;
@@ -17,7 +15,7 @@ import ru.isu.service.SubscriptionStatisticsService;
 import java.time.LocalDate;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class ApiController {
 
@@ -28,7 +26,7 @@ public class ApiController {
     private SubscriptionStatisticsService subscriptionStatisticsService;
 
     @GetMapping("/statistics/search")
-    public @ResponseBody List<ProductAndSum> searchBetweenLocalDate(
+    public List<ProductAndSum> searchBetweenLocalDate(
             @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
             @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
     ){
@@ -36,7 +34,7 @@ public class ApiController {
     }
 
     @GetMapping("/statistics/sum")
-    public @ResponseBody Integer searchSumBetweenLocalDate(
+    public Integer searchSumBetweenLocalDate(
             @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
             @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
     ){
@@ -46,8 +44,7 @@ public class ApiController {
 
 
     @GetMapping("/statistics/sumGroup")
-    public @ResponseBody
-    List<ProductSumGroupCategories> searchBetweenLocalDateGroupByCategory(
+    public List<ProductSumGroupCategories> searchBetweenLocalDateGroupByCategory(
             @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
             @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
     ){
@@ -55,7 +52,7 @@ public class ApiController {
     }
 
     @GetMapping("/statistics/subscriptionsSum")
-    public @ResponseBody Integer searchSubscriptionsSumBetweenDates(
+    public Integer searchSubscriptionsSumBetweenDates(
             @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
             @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
     ){
@@ -63,16 +60,22 @@ public class ApiController {
     }
 
     @GetMapping("/statistics/subscriptions")
-    public @ResponseBody
-    List<Subscription> searchSubsBetweenLocalDate(
+    public List<Subscription> searchSubsBetweenLocalDate(
             @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
             @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
     ){
         return subscriptionStatisticsService.findSubscriptionsByDates(start, end);
     }
 
+    @GetMapping("/statistics/subscriptionsGroupping")
+    public List<GrouppingSumProjection> searchSubscriptionsSumGroupping(@RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
+                                                                        @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
+    ){
+        return subscriptionStatisticsService.findSubscriptionsSumGroupping(start, end);
+    }
+
     @GetMapping("/statistics")
-    public @ResponseBody List<Product> index(){
+    public List<Product> index(){
         return productStatisticsService.findAll();
     }
 }
