@@ -34,12 +34,12 @@ export function ProductsTable(props) {
                 </thead>
                 <tbody>
                     {data.current.map(el => <tr>
-                        <td>{el.name}</td>
-                        <td>{el.price}</td>
-                        <td>{el.quantity}</td>
-                        <td>{el.price * el.quantity}</td>
-                        <td>{new Date(el.date.year, el.date.monthValue, el.date.dayOfMonth, el.date.hour, el.date.minute, el.date.second).toLocaleDateString(lang)}</td>
-                        <td>{el.category.name}</td>
+                        <td>{el?.name}</td>
+                        <td>{el?.price}</td>
+                        <td>{el?.quantity}</td>
+                        <td>{el?.price * el?.quantity}</td>
+                        <td>{new Date(el?.date).toLocaleDateString(lang)}</td>
+                        <td>{el?.category?.name}</td>
                     </tr>)}
                 </tbody>
             </table>
