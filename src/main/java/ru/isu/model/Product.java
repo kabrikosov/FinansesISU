@@ -1,5 +1,7 @@
 package ru.isu.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +26,7 @@ public class Product implements DateToStringConvertable {
 
     private Integer quantity;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime date;
 
     @ManyToOne
@@ -33,6 +35,7 @@ public class Product implements DateToStringConvertable {
 
     @ManyToOne
     @JoinColumn(name = "subscription_id")
+    @JsonBackReference
     private Subscription subscription;
 
     public Product() {

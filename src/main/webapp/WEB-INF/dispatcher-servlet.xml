@@ -21,11 +21,11 @@
         </mvc:argument-resolvers>
     </mvc:annotation-driven>
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-<!--        <property name="converters">-->
-<!--            <list>-->
-<!--                <bean class="ru.isu.converter.LocalDateTimeConverter"/>-->
-<!--            </list>-->
-<!--        </property>-->
+        <property name="converters">
+            <list>
+                <bean class="ru.isu.converter.LocalDateTimeConverter"/>
+            </list>
+        </property>
     </bean>
     <bean class="org.springframework.data.repository.support.DomainClassConverter">
         <constructor-arg name="conversionService" ref="conversionService"/>

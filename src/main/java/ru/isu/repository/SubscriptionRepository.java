@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.isu.model.Subscription;
-import ru.isu.projection.SubscriptionInfo;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,11 +19,8 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Inte
             "or (s.startDateTime < :dateStart and (s.expirationDateTime is null or s.expirationDateTime >= :dateEnd))")
     Integer findSumByDateBetween(@Param("dateStart") LocalDateTime dateStart, @Param("dateEnd") LocalDateTime dateEnd);
 
-    @Query("select s from Subscription s " +
-            "where (s.startDateTime between :dateStart and :dateEnd)" +
-            " or (s.startDateTime <= :dateStart and " +
-                "(s.expirationDateTime is null or s.expirationDateTime >= :dateStart))")
-    List<SubscriptionInfo> findSubscriptionsByDates(@Param("dateStart") LocalDateTime dateStart, @Param("dateEnd") LocalDateTime dateEnd);
+    @Query("from Subscription s where (s.startDateTime between :dateStart and :dateEnd) or (s.startDateTime <= :dateStart and (s.expirationDateTime is null or s.expirationDateTime >= :dateStart))")
+    List<Subscription> findSubscriptionsByDates(@Param("dateStart") LocalDateTime dateStart, @Param("dateEnd") LocalDateTime dateEnd);
 //    List<SubscriptionInfo> findSubscriptionsByStartDateTimeBeforeAndAndExpirationDateTimeAfterOrStartDateTimeBeforeAndExpirationDateTimeIsNull(LocalDateTime startDateTime, LocalDateTime expirationDateTime);
 
 }
