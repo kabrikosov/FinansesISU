@@ -708,7 +708,7 @@ table tr:last-child td {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
     flex-wrap: wrap;
     width: 100%;
 }
@@ -721,7 +721,7 @@ table tr:last-child td {
 .statistics{
     display: flex;
     flex-direction: column;
-    height: 100%;
+    justify-content: space-evenly;
     background-color: #ffffff30;
     border-radius: 1em;
     border: 1px solid white;
@@ -738,8 +738,10 @@ table tr:last-child td {
 
 .item__product{
     margin-left: 1em;
-    width: 50%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    padding-right: 1em;
+    table-layout: auto;
+    width: 100%;
+}
+.item__product tr:first-child td{
+    border-top: 0;
 }

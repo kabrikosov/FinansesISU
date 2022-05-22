@@ -1,29 +1,9 @@
 import React, {useRef, useState, useEffect} from "react";
+import {strings} from "../Strings";
 
 const requ = window.location.origin + '/api/products/add';
 // const init = {method: 'POST', headers: {'X-CSRF-TOKEN': token}};
 
-const strings = {
-    "en": {
-        name: 'Name',
-        price: 'Price',
-        quantity: 'Quantity',
-        date: 'Date',
-        category: 'Category',
-        subscription: 'Subscription',
-        selectOption: "Select one option from list",
-        submit: "Submit"
-    }, "ru": {
-        name: 'Название',
-        price: 'Цена',
-        quantity: 'Количество',
-        date: 'Дата',
-        category: 'Категория',
-        subscription: 'Подписка',
-        selectOption: "Выберите один элемент из списка",
-        submit: "Отправить"
-    }
-}
 
 export function AddProduct() {
     const [name, setName] = useState('');
@@ -33,7 +13,7 @@ export function AddProduct() {
     const [category, setCategory] = useState(null);
     const [subscription, setSubscription] = useState(null);
     const [data, setData] = useState({categories: [], subscriptions: []});
-    const [status, setStatus] = useState({categories: false, subscriptions: false});
+    const [status, setStatus] = useState({loaded: false});
 
 
     function saveProduct(e) {
@@ -65,31 +45,24 @@ export function AddProduct() {
         let req1 = window.location.origin + "/api/categories/all"
         let req2 = window.location.origin + "/api/subscriptions/all"
 
-        fetch(req1)
-            .then(resp => resp.json())
-            .then(resp => {
-                setData({categories: resp, subscriptions: data.subscriptions});
-                if (!status.categories){
-                    setStatus({categories: true, subscriptions: status.subscriptions});
+        let resp1 = fetch(req1).then(resp => resp.json());
+        let resp2 = fetch(req2).then(resp => resp.json());
+        Promise.all([resp1, resp2])
+            .then(response => {
+                setData({categories: response[0], subscriptions: response[1]})
+                setDate(new Date());
+                if (!status.loaded){
+                    setStatus({loaded: true});
                 }
             })
-            .catch(console.log)
-
-        fetch(req2)
-            .then(resp => resp.json())
-            .then(resp => {
-                setData({subscriptions: resp, categories: data.categories});
-                if (!status.subscriptions){
-                    setStatus({subscriptions: true, categories: status.categories});
-                }
-            });
+            .catch(console.log);
     }, [status])
 
     return (
         <div className="content__add-form">
             <form>
                 <div className="form__field">
-                    <label htmlFor="name">{strings[lang].name}</label>
+                    <label htmlFor="name">{strings[lang].model.name}</label>
                     <input
                         id="name"
                         type="text"
@@ -99,42 +72,42 @@ export function AddProduct() {
                     />
                 </div>
                 <div className="form__field">
-                    <label htmlFor="quantity">{strings[lang].quantity}</label>
+                    <label htmlFor="quantity">{strings[lang].model.quantity}</label>
                     <input id="quantity" type="number" name="quantity"
                            value={quantity}
                            onChange={e => setQuantity(e.target.value)}
                     />
                 </div>
                 <div className="form__field">
-                    <label htmlFor="price">{strings[lang].price}</label>
+                    <label htmlFor="price">{strings[lang].model.price}</label>
                     <input id="price" type="number" name="price"
                            value={price}
                            onChange={e => setPrice(e.target.value)}
                     />
                 </div>
                 <div className="form__field">
-                    <label htmlFor="date">{strings[lang].date}</label>
+                    <label htmlFor="date">{strings[lang].model.date}</label>
                     <input id="date" type="datetime-local" name="date"
                            value={date.toISOString().substr(0, 16)}
                            onChange={e => setDate(e.target.value)}/>
                 </div>
                 <div className="form__field">
-                    <label htmlFor="category">{strings[lang].category}</label>
+                    <label htmlFor="category">{strings[lang].model.category}</label>
                     <select id="category" name="category"
                             value={category}
                             onChange={e => setCategory(e.target.value)}>
-                        <option selected value={null}>{strings[lang].selectOption}</option>
+                        <option selected value={null}>{strings[lang].chooseOption}</option>
                         {data.categories.map(el =>
                             <option value={el.id}>{el.name}</option>
                         )}
                     </select>
                 </div>
                 <div className="form__field">
-                    <label htmlFor="subscription">{strings[lang].subscription}</label>
+                    <label htmlFor="subscription">{strings[lang].model.subscription}</label>
                     <select id="subscription" name="subscription"
                             value={subscription}
                             onChange={e => setSubscription(e.target.value)}>
-                        <option selected value={null}>{strings[lang].selectOption}</option>
+                        <option selected value={null}>{strings[lang].chooseOption}</option>
                         {data.subscriptions.map(el =>
                             <option value={el.id}>{el.name}</option>
                         )}

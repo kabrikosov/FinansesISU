@@ -3,12 +3,18 @@ import {ProductsTable} from "./ProductsTable";
 
 const requ = window.location.origin + "/api/statistics"
 
+function representDate(date) {
+    date = new Date(date);
+    date.setMonth(date.getMonth() + 1);
+    return date.toLocaleDateString()
+}
+
 export function SubscriptionsComponent() {
     const [summaryData, setSummaryData] = useState(0);
     const [exactData, setExactData] = useState([]);
     const start = useRef(new Date(Date.now()));
     const end = useRef(new Date(Date.now()))
-    const [status, setStatus] = useState({summaryData: false, exactData: false});
+    const [status, setStatus] = useState({loaded: false});
 
     useEffect(() => {
         start.current = new Date(
@@ -22,29 +28,24 @@ export function SubscriptionsComponent() {
             "&end=" + end.current.toISOString().substring(0, 10);
         let req2 = requ + "/subscriptions?start=" + start.current.toISOString().substring(0, 10) +
             "&end=" + end.current.toISOString().substring(0, 10);
+        let req3 = requ + "/subscriptionsGroupping?start=" + start.current.toISOString().substring(0, 10) +
+            "&end=" + end.current.toISOString().substring(0, 10);
 
-        fetch(req1)
-            .then(resp => resp.json())
-            .then(resp => {
-                setSummaryData(resp);
-                console.log(resp);
-                if (!status.summaryData) {
-                    setStatus({summaryData: true, exactData: status.exactData});
-                }
-            })
-            .catch(console.warn);
+        const resp1 = fetch(req1).then(resp => resp.json());
+        const resp2 = fetch(req2).then(resp => resp.json());
+        const resp3 = fetch(req3).then(resp => resp.json());
 
-        fetch(req2)
-            .then(resp => resp.json())
-            .then(resp => {
-                setExactData(resp);
-                console.log(resp);
-                if (!status.exactData) {
-                    setStatus({summaryData: status.summaryData, exactData: true});
-                }
+        Promise.all([resp1, resp2, resp3])
+            .then(response => {
+                setSummaryData(response[0]);
+                response[1].map(el => {
+                        el.sum = response[2].find(rel => rel.id === el.id).sum
+                    }
+                );
+                setExactData(response[1]);
             })
-            .catch(console.warn);
-    }, [status])
+
+    }, [])
 
     return (
         <div className="statistics">
@@ -52,19 +53,25 @@ export function SubscriptionsComponent() {
                 <span>Запланировано следующий месяц: </span>
                 <span>{summaryData} у.&nbsp;е.</span>
             </div>
-            <div className="statistics_items">
-                {exactData.map(el =>
-                    <div className="statistics__item">
-                        <span className="item__statistics-name">{el.name}: </span>
-                        {el.products.map(prod =>
-                            <div className="item__product">
-                                <span>{prod.name}</span>
-                                <span> {prod.quantity}x{prod.price}={prod.quantity*prod.price}</span>
-                            </div>
+            {exactData.map(el =>
+                <div className="statistics__item">
+                    <span className="item__statistics-name">{el?.name} ({el?.sum} у.&nbsp;е.): </span>
+                    <table className="item__product">
+                        <tbody>
+                        {el?.products.map(prod =>
+                            <tr>
+                                <td>{prod?.name}</td>
+                                <td>{prod?.quantity}x{prod?.price}</td>
+                                <td>{prod?.quantity * prod?.price}</td>
+                                <td>{
+                                    representDate(prod.date)
+                                }</td>
+                            </tr>
                         )}
-                    </div>
-                )}
-            </div>
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     )
 }
