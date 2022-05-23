@@ -2,13 +2,18 @@ package ru.isu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.isu.model.Product;
 import ru.isu.model.Subscription;
+import ru.isu.model.User;
 import ru.isu.projection.GrouppingSumProjection;
 import ru.isu.projection.ProductAndSum;
 import ru.isu.projection.ProductSumGroupCategories;
+import ru.isu.repository.UserRepository;
 import ru.isu.service.ProductStatisticsService;
 import ru.isu.service.SubscriptionStatisticsService;
 
@@ -24,6 +29,9 @@ public class ApiController {
 
     @Autowired
     private SubscriptionStatisticsService subscriptionStatisticsService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/statistics/search")
     public List<ProductAndSum> searchBetweenLocalDate(
@@ -77,5 +85,15 @@ public class ApiController {
     @GetMapping("/statistics")
     public List<Product> index(){
         return productStatisticsService.findAll();
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    public User register(@RequestBody User user) {
+        user.setPassword(user.getPass());
+        var ret = userRepository.save(user);
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                user, user.getPassword(), user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        return ret;
     }
 }

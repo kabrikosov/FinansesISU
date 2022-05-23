@@ -2,31 +2,34 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:security="http://www.springframework.org/schema/security" xmlns:p="http://www.springframework.org/schema/p"
-
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
-          http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
-">
+       xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
     <security:http auto-config="true" use-expressions="false">
         <!--Использование базовой http-авторизации-->
         <!--<security:http-basic/>-->
         <security:form-login
-            login-page="/home"
+            login-page="/login"
             login-processing-url="/login"
             username-parameter="custom_username"
             password-parameter="custom_password"
             default-target-url="/home"
             authentication-failure-url="/login?error=true"
         />
+
+        <security:logout logout-url="/logout" logout-success-url="/login?logout=true"/>
+
         <!--Важна последовательность от меньшего к большему-->
+        <security:intercept-url pattern='/**/login' access='ROLE_ANONYMOUS'/>
+        <security:intercept-url pattern='/**/register' access='ROLE_ANONYMOUS'/>
+        <security:intercept-url pattern="/resources/**" access='ROLE_ANONYMOUS,ROLE_USER'/>
         <security:intercept-url pattern='/' access='ROLE_ANONYMOUS,ROLE_USER'/>
-        <security:intercept-url pattern='/home' access='ROLE_ANONYMOUS,ROLE_USER'/>
         <!--При использовании собственной формы авторизации важно открыть эту форму всем-->
-        <security:intercept-url pattern='/login' access='ROLE_ANONYMOUS'/>
         <security:intercept-url pattern="/**" access="ROLE_USER"/>
-        <security:csrf token-repository-ref="tokenRepository" />
     </security:http>
+
+
 
     <security:authentication-manager>
         <security:authentication-provider>
