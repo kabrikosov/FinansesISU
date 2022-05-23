@@ -1,6 +1,8 @@
 import React, {useRef, useState, useEffect} from "react";
 import {ProductsTable} from "./ProductsTable";
+import {getToken} from "./helpers";
 
+let config = {headers: {'X-CSRF-TOKEN': getToken()}};
 const requ = window.location.origin + "/api/statistics"
 
 function representDate(date) {
@@ -31,9 +33,9 @@ export function SubscriptionsComponent() {
         let req3 = requ + "/subscriptionsGroupping?start=" + start.current.toISOString().substring(0, 10) +
             "&end=" + end.current.toISOString().substring(0, 10);
 
-        const resp1 = fetch(req1).then(resp => resp.json());
-        const resp2 = fetch(req2).then(resp => resp.json());
-        const resp3 = fetch(req3).then(resp => resp.json());
+        const resp1 = fetch(req1, config).then(resp => resp.json());
+        const resp2 = fetch(req2, config).then(resp => resp.json());
+        const resp3 = fetch(req3, config).then(resp => resp.json());
 
         Promise.all([resp1, resp2, resp3])
             .then(response => {
