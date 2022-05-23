@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:security="http://www.springframework.org/schema/security" xmlns:p="http://www.springframework.org/schema/p"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
@@ -25,6 +25,7 @@
         <!--При использовании собственной формы авторизации важно открыть эту форму всем-->
         <security:intercept-url pattern='/login' access='ROLE_ANONYMOUS'/>
         <security:intercept-url pattern="/**" access="ROLE_USER"/>
+        <security:csrf token-repository-ref="tokenRepository" />
     </security:http>
 
     <security:authentication-manager>
