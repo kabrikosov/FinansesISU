@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../views/header :: head"/>
+<body>
+<div class="wrapper">
+    <div th:replace="../views/header :: navigation"></div>
+    <div class="menu">
+        <div class="menu__head">
+            <h2 th:text=" #{login}"></h2>
+            <div th:replace="home :: head-profile"/>
+        </div>
+        <div class="menu__content">
+            <div class="menu__content__wrapper">
+                <form action="#" th:action="@{/login}" method="post">
+                    <div class="form-group">
+                        <label for="login">Username</label>
+                        <input id="login" class="form-control" name="custom_username"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="pass">Password</label>
+                        <input id="pass" class="form-control" name="custom_password"/>
+                    </div>
+                    <div id="errors_login" class="text-danger" th:if="${(param.error != null) and (param.error[0] == 'true')}">
+                        Invalid Username and Password.
+                    </div>
+                    <div id="logout" class="text-info" th:if="${(param.logout != null) and (param.logout[0] == 'true')}">
+                        You have successfully been logged out.
+                    </div>
+                    <input th:if="${_csrf != null}" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" id="btn-save" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

@@ -20,7 +20,8 @@
     <div th:replace="header :: navigation"></div>
     <div class="menu">
         <div class="menu__head">
-            <h1 th:text=" #{categories}"></h1>
+            <h2 th:text=" #{categories}"></h2>
+            <div th:replace="home :: head-profile"/>
         </div>
         <div class="menu__content">
             <div class="content__categories">

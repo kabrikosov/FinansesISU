@@ -4,7 +4,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="head">
     <meta charset="UTF-8">
-    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"/>
     <title>Finances</title>
     <link rel="stylesheet" th:type="'text/css'" th:href="@{/resources/css/style.css}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
