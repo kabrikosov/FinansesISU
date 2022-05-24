@@ -4,9 +4,9 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="head">
     <meta charset="UTF-8">
-    <meta th:name="${_csrf.parameterName}" th:content="${_csrf.token}"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
     <title>Finances</title>
-    <link rel="stylesheet" th:href="@{/resources/css/style.css}">
+    <link rel="stylesheet" th:type="'text/css'" th:href="@{/resources/css/style.css}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;400;500;700&display=swap" rel="stylesheet">
@@ -103,10 +103,9 @@
                 <span>RU</span>
             </div>
         </div>
-        <script th:inline="javascript" defer>
+        <script th:inline="javascript" type="text/javascript" defer>
             /*<![CDATA[*/
             var lang = [[${#locale}]];
-            console.log(lang);
             /*]]>*/
             let checked = (lang === "ru");
             let box = document.getElementById("languageSwitcher")

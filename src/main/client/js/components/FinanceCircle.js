@@ -1,5 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
+import {getToken} from "./helpers";
 
+let config = {headers: {'X-CSRF-TOKEN': getToken()}};
 const monthNames = {
     en: ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"],
@@ -40,7 +42,7 @@ export function FinanceCircle() {
             new Date(date.current.getFullYear(), date.current.getMonth(), 0).toISOString().substring(0, 10) +
             "&end=" + new Date(date.current.getFullYear(), date.current.getMonth() + 1, 0).toISOString().substring(0, 10);
 
-        fetch(req)
+        fetch(req, config)
             .then((response) => {
                 return response.json();
             })

@@ -1,4 +1,7 @@
 import React, {useRef, useState, useEffect} from "react";
+import {getToken} from "./helpers";
+
+let config = {headers: {'X-CSRF-TOKEN': getToken()}};
 
 export function ProductsTable(props) {
     const data = useRef([]);
@@ -10,7 +13,7 @@ export function ProductsTable(props) {
 
     function initialize() {
         const req = window.location.origin + "/api/products/all";
-        fetch(req)
+        fetch(req, config)
             .then(response => response.json())
             .then(response => {
                 data.current = response;

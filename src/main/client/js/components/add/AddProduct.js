@@ -1,9 +1,9 @@
 import React, {useRef, useState, useEffect} from "react";
 import {strings} from "../Strings";
-
+import {getToken} from "../helpers";
 const requ = window.location.origin + '/api/products/add';
-// const init = {method: 'POST', headers: {'X-CSRF-TOKEN': token}};
 
+let config = {headers: {'X-CSRF-TOKEN': getToken(), 'Content-Type': 'application/json'}};
 
 export function AddProduct() {
     const [name, setName] = useState('');
@@ -45,8 +45,8 @@ export function AddProduct() {
         let req1 = window.location.origin + "/api/categories/all"
         let req2 = window.location.origin + "/api/subscriptions/all"
 
-        let resp1 = fetch(req1).then(resp => resp.json());
-        let resp2 = fetch(req2).then(resp => resp.json());
+        let resp1 = fetch(req1, config).then(resp => resp.json());
+        let resp2 = fetch(req2, config).then(resp => resp.json());
         Promise.all([resp1, resp2])
             .then(response => {
                 setData({categories: response[0], subscriptions: response[1]})

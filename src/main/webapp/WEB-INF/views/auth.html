@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../views/header :: head"/>
+<body>
+<div class="wrapper">
+    <div th:replace="../views/header :: navigation"></div>
+    <div class="menu">
+        <div class="menu__head">
+            <h1 th:text=" #{home}"></h1>
+        </div>
+        <div class="menu__content">
+            <div id="app" class="menu__content__wrapper"></div>
+        </div>
+    </div>
+</div>
+</body>
