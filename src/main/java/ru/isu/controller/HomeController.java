@@ -24,13 +24,19 @@ public class HomeController {
         return new ModelAndView("home");
     }
 
-    @GetMapping(value={"/login", "/register"})
+    @GetMapping(value={"/login"})
+    public ModelAndView login(){
+        return new ModelAndView("login");
+    }
+
+    @GetMapping(value={"/register"})
     public ModelAndView auth(){
-        return new ModelAndView("auth");
+        return new ModelAndView("register");
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String register(@ModelAttribute User user) {
+        user.setRole("ROLE_USER");
         userRepository.save(user);
         Authentication auth = new UsernamePasswordAuthenticationToken(
                 user, user.getPassword(), user.getAuthorities());

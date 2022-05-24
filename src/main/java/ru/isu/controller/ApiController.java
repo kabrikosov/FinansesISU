@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -38,15 +39,17 @@ public class ApiController {
             @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
             @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
     ){
-        return productStatisticsService.findProductsByDateBetween(start, end);
+        var user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return productStatisticsService.findProductsByDateBetween(start, end, user);
     }
 
     @GetMapping("/statistics/sum")
     public Integer searchSumBetweenLocalDate(
             @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-            @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
+            @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
+            @AuthenticationPrincipal User user
     ){
-        return productStatisticsService.findSumByDateBetween(start, end);
+        return productStatisticsService.findSumByDateBetween(start, end, user);
     }
 
 
@@ -54,42 +57,46 @@ public class ApiController {
     @GetMapping("/statistics/sumGroup")
     public List<ProductSumGroupCategories> searchBetweenLocalDateGroupByCategory(
             @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-            @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
+            @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
+            @AuthenticationPrincipal User user
     ){
-        return productStatisticsService.findSumByDateBetweenGroupByCategory(start, end);
+        return productStatisticsService.findSumByDateBetweenGroupByCategory(start, end, user);
     }
 
     @GetMapping("/statistics/subscriptionsSum")
     public Integer searchSubscriptionsSumBetweenDates(
             @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-            @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
+            @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
+            @AuthenticationPrincipal User user
     ){
-        return subscriptionStatisticsService.searchSubscriptionsSumBetweenDates(start, end);
+        return subscriptionStatisticsService.searchSubscriptionsSumBetweenDates(start, end, user);
     }
 
     @GetMapping("/statistics/subscriptions")
     public List<Subscription> searchSubsBetweenLocalDate(
             @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-            @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
+            @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
+            @AuthenticationPrincipal User user
     ){
-        return subscriptionStatisticsService.findSubscriptionsByDates(start, end);
+        return subscriptionStatisticsService.findSubscriptionsByDates(start, end, user);
     }
 
     @GetMapping("/statistics/subscriptionsGroupping")
     public List<GrouppingSumProjection> searchSubscriptionsSumGroupping(@RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-                                                                        @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
+                                                                        @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
+                                                                        @AuthenticationPrincipal User user
     ){
-        return subscriptionStatisticsService.findSubscriptionsSumGroupping(start, end);
+        return subscriptionStatisticsService.findSubscriptionsSumGroupping(start, end, user);
     }
 
     @GetMapping("/statistics")
-    public List<Product> index(){
-        return productStatisticsService.findAll();
+    public List<Product> index(@AuthenticationPrincipal User user){
+
+        return productStatisticsService.findAllByUser(user);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public User register(@RequestBody User user) {
-        user.setPassword(user.getPass());
         var ret = userRepository.save(user);
         Authentication auth = new UsernamePasswordAuthenticationToken(
                 user, user.getPassword(), user.getAuthorities());

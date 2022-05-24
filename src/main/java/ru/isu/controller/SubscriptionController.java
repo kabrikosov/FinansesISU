@@ -1,6 +1,8 @@
 package ru.isu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -10,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.isu.model.Product;
 import ru.isu.model.Subscription;
+import ru.isu.model.User;
 import ru.isu.repository.SubscriptionRepository;
 import ru.isu.validator.ProductValidator;
 import ru.isu.validator.SubscriptionValidator;
@@ -30,8 +33,9 @@ public class SubscriptionController {
 
     @GetMapping(value = {"/all", ""})
     public ModelAndView viewAll(){
+        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var mv = new ModelAndView("all_subscriptions");
-        mv.addObject("subscriptionList", repository.findAll());
+        mv.addObject("subscriptionList", repository.findAllByUser(user));
         return mv;
     }
 
@@ -44,8 +48,11 @@ public class SubscriptionController {
 
     @GetMapping("/add")
     public ModelAndView add(){
+        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var mv = new ModelAndView("add_subscription");
-        mv.addObject("subscription", new Subscription());
+        var sub = new Subscription();
+        sub.setUser(user);
+        mv.addObject("subscription", sub);
         return mv;
     }
 
