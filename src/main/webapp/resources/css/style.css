@@ -773,6 +773,7 @@ table tr:last-child td {
 
 .display-none{
     display: none!important;
+    opacity: 0;
 }
 
 .authorization{
@@ -798,6 +799,8 @@ table tr:last-child td {
     width: 45%;
     border-radius: 1em;
     cursor: pointer;
+    color: black!important;
+    text-align: center;
 }
 
 .authorization__button--login{
@@ -818,4 +821,34 @@ table tr:last-child td {
 .profile__stat--top{
     margin-left: 0;
     margin-right: 2em;
+}
+
+.content__add-form-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+.content__add-form-wrapper>*+*{
+    margin-left: 2em;
+}
+
+.delete-item-button{
+    transition: all .5s;
+    width: 1em;
+    opacity: 1;
+    transform: translateX(0px);
+    cursor: pointer;
+    position: absolute;
+    padding-left: .5em;
+}
+
+.delete-item-button>img{
+    width: 1em;
+}
+
+.delete-item-button--hidden{
+    opacity: 0;
+    transform: translateX(20px);
 }

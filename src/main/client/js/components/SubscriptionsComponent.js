@@ -1,15 +1,10 @@
 import React, {useRef, useState, useEffect} from "react";
 import {ProductsTable} from "./ProductsTable";
-import {getToken} from "./helpers";
+import {getToken, representDate} from "./helpers";
 
 let config = {headers: {'X-CSRF-TOKEN': getToken()}};
 const requ = window.location.origin + "/api/statistics"
 
-function representDate(date) {
-    date = new Date(date);
-    date.setMonth(date.getMonth() + 1);
-    return date.toLocaleDateString()
-}
 
 export function SubscriptionsComponent() {
     const [summaryData, setSummaryData] = useState(0);
@@ -41,7 +36,7 @@ export function SubscriptionsComponent() {
             .then(response => {
                 setSummaryData(response[0]);
                 response[1].map(el => {
-                        el.sum = response[2].find(rel => rel.id === el.id).sum
+                        el.sum = response[2].find(rel => rel.id === el.id)?.sum ?? 0
                     }
                 );
                 setExactData(response[1]);
@@ -65,9 +60,7 @@ export function SubscriptionsComponent() {
                                 <td>{prod?.name}</td>
                                 <td>{prod?.quantity}x{prod?.price}</td>
                                 <td>{prod?.quantity * prod?.price}</td>
-                                <td>{
-                                    representDate(prod.date)
-                                }</td>
+                                <td>{representDate(prod.date)}</td>
                             </tr>
                         )}
                         </tbody>

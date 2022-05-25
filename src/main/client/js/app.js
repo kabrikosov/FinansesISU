@@ -6,6 +6,7 @@ import {AddViewEditProduct} from "./components/add/AddViewEditProduct";
 import {StatisticsComponent} from "./components/StatisticsComponent";
 import {LogInComponent} from "./components/auth/LogInComponent";
 import {RegisterComponent} from "./components/auth/Registration";
+import {AddViewEditSubscription} from "./components/add/AddViewEditSubscription"
 
 const root = createRoot(document.getElementById("app"));
 root.render(
@@ -19,6 +20,10 @@ root.render(
                 <Route path=":id" element={<AddViewEditProduct />} />
                 <Route path="add" element={<AddViewEditProduct />}/>
                 <Route exact path="" element={<ProductsTable />} />
+            </Route>
+            <Route path="/subscriptions">
+                <Route path=":id" element={<AddViewEditSubscription />} />
+                <Route path="add" element={<AddViewEditSubscription />} />
             </Route>
         </Routes>
     </Router>

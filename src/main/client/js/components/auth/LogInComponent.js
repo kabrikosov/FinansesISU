@@ -7,11 +7,12 @@ export function LogInComponent() {
 
     const [state, setState] = useState({login: "", pass: ""});
 
-    function login() {
+    function login(ev) {
+        ev.preventDefault();
         let requ = window.location.origin + "/login";
         const l = {
-            login: state.login,
-            password: state.pass
+            custom_username: state.login,
+            custom_password: state.pass
         }
         let cfg = {
             method: 'POST',
@@ -23,7 +24,9 @@ export function LogInComponent() {
                     'application/json'
             }
         }
-        fetch(requ, cfg).then(console.log).catch(console.warn)
+        fetch(requ, cfg).then(resp => {
+            window.location.replace(resp.url);
+        }).catch(console.warn)
     }
 
     function register() {
@@ -31,25 +34,25 @@ export function LogInComponent() {
     }
 
     return (
-        <div className="authorization_overlay display-none">
+        <div className="authorization_overlay">
             <div className="authorization">
                 <form action="/login" method="post">
                     <span className="authorization__login">Login</span>
                     <div className="authorization__input" data-validate="Login is required">
-                        <input type="text" name="login" placeholder="Login" value={state.login}
+                        <input type="text" name="custom_username" placeholder="Login" value={state.login}
                                onChange={ev => setState({
                                    login: ev.target.value,
                                    pass: state.pass
                                })}/>
                     </div>
                     <div className="authorization__input" data-validate="Password is required">
-                        <input type="password" name="password" placeholder="Password" value={state.pass}
+                        <input type="password" name="custom_password" placeholder="Password" value={state.pass}
                                onChange={ev => setState({
                                    login: state.login,
                                    pass: ev.target.value
                                })}/>
                     </div>
-                    <input type="hidden" name="$X-CSRF-TOKEN" value={getToken()}/>
+                    <input type="hidden" name="X-CSRF-TOKEN" value={getToken()}/>
                     <div className="errors display-none">
                         <span id="errorsText"></span>
                     </div>

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {strings} from "../Strings";
 import {getToken} from "../helpers";
 import {useParams} from "react-router-dom";
-const requ = window.location.origin + '/api/products/add';
+const requ = window.location.origin + '/api/products';
 
 let postHeaders = {'X-CSRF-TOKEN': getToken(), 'Content-Type': 'application/json'};
 const getConfig = {headers: {'X-CSRF-TOKEN': getToken()}};
@@ -12,7 +12,7 @@ export function AddViewEditProduct() {
         name: '',
         quantity: 1,
         price: 1,
-        date: new Date(),
+        date: new Date().toISOString().substr(0, 16),
         category: null,
         subscription: null,
         user: 0,
@@ -27,7 +27,7 @@ export function AddViewEditProduct() {
             name: state.name,
             quantity: state.quantity,
             price: state.price,
-            date: state.date.toISOString().substr(0, 16),
+            date: state.date,
             category: {
                 id: state.category
             },
@@ -40,9 +40,9 @@ export function AddViewEditProduct() {
         } else product.subscription = null
 
         let method = (id == null) ? 'POST' : 'PUT';
+        let req = requ + ((id == null) ? "/add" : `/${id}/put`)
 
-
-        fetch(requ, {
+        fetch(req, {
             body: JSON.stringify(product),
             headers: postHeaders,
             method: method
@@ -53,6 +53,18 @@ export function AddViewEditProduct() {
             .catch(err => {
                 console.log(err)
             });
+    }
+
+    function deleteProduct(e){
+        e.preventDefault();
+        let req = requ + `/${id}/delete`;
+        fetch(req, {
+            method: 'Delete',
+            headers: {'X-CSRF-TOKEN': getToken()}
+        }).then(resp => {
+            if (resp.status === 200)
+                window.location.replace(window.location.origin + '/products');
+        }).catch(console.warn);
     }
 
     function noParamsSpecified(){
@@ -70,7 +82,7 @@ export function AddViewEditProduct() {
                     name: state.name,
                     quantity: state.quantity,
                     price: state.price,
-                    date: new Date(),
+                    date: state.date,
                     category: state.category,
                     subscription: state.subscription,
                     user: response[2],
@@ -96,9 +108,10 @@ export function AddViewEditProduct() {
                     name: resp[0].name,
                     quantity: resp[0].quantity,
                     price: resp[0].price,
-                    date: new Date(resp[0].date),
-                    category: resp[0].category,
-                    user: resp[0].user
+                    date: new Date(resp[0].date).toISOString().substr(0, 16),
+                    category: resp[0].category.id,
+                    user: resp[0].user.id,
+                    subscription: resp[0].subscription?.id
                 });
                 setData({
                     categories: resp[1],
@@ -171,7 +184,7 @@ export function AddViewEditProduct() {
                 <div className="form__field">
                     <label htmlFor="date">{strings[lang].model.date}</label>
                     <input id="date" type="datetime-local" name="date"
-                           value={state.date.toISOString().substr(0, 16)}
+                           value={state.date}
                            onChange={e => setState({
                                name: state.name,
                                quantity: state.quantity,
@@ -222,6 +235,8 @@ export function AddViewEditProduct() {
                 </div>
                 <button onClick={saveProduct} className="form__submit-button"
                         type="submit">{strings[lang].forms.submit}</button>
-            </form>
+                {(id != null) && <button onClick={deleteProduct} className="form__submit-button form__submit-button--delete"
+                    type="submit">{strings[lang].forms.delete}</button>}
+        </form>
         </div>)
 }

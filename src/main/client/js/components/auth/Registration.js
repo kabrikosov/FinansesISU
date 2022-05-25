@@ -37,13 +37,16 @@ export function RegisterComponent() {
                 'X-CSRF-TOKEN': getToken(),
             }
         })
-            .then(console.log)
+            .then(resp => {
+                if (resp.status === 200)
+                    window.location.pathname = "/home"
+            })
             .catch(err => error(err));
     }
 
 
     return (
-        <div className="authorization_overlay display-none">
+        <div className="authorization_overlay">
             <div className="authorization">
                 <span className="authorization__login">Register</span>
                 <form method="post" action="http://localhost:8080/register">
