@@ -4,9 +4,11 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,24 +21,33 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Integer id;
 
-    private String name;
+    @Column(name = "FIRST_NAME")
+    private String firstName;
+
+    @Column(name = "LAST_NAME")
+    private String lastName;
 
     private Integer monthlyIncome;
 
     private Integer cashAvailable;
 
-    private String login;
+    @Column(name = "USERNAME")
+    private String username;
 
+    @Column(name = "PASSWORD")
     private String password;
+
+    @Column(name = "ROLE")
+    private String role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("user");
+        return AuthorityUtils.createAuthorityList("ROLE_USER");
     }
 
     @Override
     public String getUsername() {
-        return name;
+        return username;
     }
 
     @Override

@@ -38,6 +38,9 @@ public class Product implements DateToStringConvertable {
     @JsonBackReference
     private Subscription subscription;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    private User user;
+
     public Product() {
         this.date = LocalDateTime.now();
         this.quantity = 1;

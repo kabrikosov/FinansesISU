@@ -3,6 +3,7 @@ package ru.isu.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.isu.model.Product;
+import ru.isu.model.User;
 import ru.isu.projection.ProductAndSum;
 import ru.isu.projection.ProductSumGroupCategories;
 import ru.isu.repository.CategoryRepository;
@@ -22,19 +23,19 @@ public class ProductStatisticsService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public List<ProductAndSum> findProductsByDateBetween(LocalDate start, LocalDate end){
-        return productRepository.findProductsByDateBetween(LocalDateTime.of(start, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX));
+    public List<ProductAndSum> findProductsByDateBetween(LocalDate start, LocalDate end, User user){
+        return productRepository.findProductsByDateBetweenAndUserEquals(LocalDateTime.of(start, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX), user);
     }
 
-    public Integer findSumByDateBetween(LocalDate start, LocalDate end){
-        return productRepository.findSumByDateBetween(LocalDateTime.of(start, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX));
+    public Integer findSumByDateBetween(LocalDate start, LocalDate end, User user){
+        return productRepository.findSumByDateBetween(LocalDateTime.of(start, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX), user);
     }
 
-    public List<ProductSumGroupCategories> findSumByDateBetweenGroupByCategory(LocalDate start, LocalDate end){
-        return productRepository.findSumByDateBetweenGroupByCategory(LocalDateTime.of(start, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX));
+    public List<ProductSumGroupCategories> findSumByDateBetweenGroupByCategory(LocalDate start, LocalDate end, User user){
+        return productRepository.findSumByDateBetweenGroupByCategory(LocalDateTime.of(start, LocalTime.MIN), LocalDateTime.of(end, LocalTime.MAX), user);
     }
-    public List<Product> findAll(){
-        return productRepository.findAll();
+    public List<Product> findAllByUser(User user){
+        return productRepository.findAllByUser(user);
     }
 
 }

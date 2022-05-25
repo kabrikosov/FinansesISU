@@ -1,10 +1,12 @@
 package ru.isu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.isu.model.Subscription;
+import ru.isu.model.User;
 import ru.isu.repository.SubscriptionRepository;
 import ru.isu.validator.SubscriptionValidator;
 
@@ -23,8 +25,8 @@ public class SubscriptionRestController {
     }
 
     @GetMapping(value = {"/all", ""})
-    public List<Subscription> viewAll(){
-        return repository.findAll();
+    public List<Subscription> viewAll(@AuthenticationPrincipal User user){
+        return repository.findAllByUser(user);
     }
 
     @GetMapping("/{subscription}")

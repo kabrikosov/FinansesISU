@@ -18,7 +18,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         var token = (UsernamePasswordAuthenticationToken) authentication;
-        var user = repository.findUserByLogin(token.getName());
+        var user = repository.findUserByUsername(token.getName());
         if (user==null || !user.getPassword().equalsIgnoreCase(token.getCredentials().toString())){
             throw new BadCredentialsException("No user or password");
         }
