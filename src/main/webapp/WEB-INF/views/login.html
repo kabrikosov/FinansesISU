@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../views/header :: head"/>
+<body>
+<div class="wrapper">
+    <div th:replace="../views/header :: navigation"></div>
+    <div class="menu">
+        <div class="menu__head">
+            <h2 th:text=" #{login}"></h2>
+            <div th:replace="home :: head-profile"/>
+        </div>
+        <div class="menu__content">
+            <div class="menu__content__wrapper">
+                <div class="authorization_overlay">
+                    <div class="authorization">
+                        <form id="login-form" th:action="@{/login}" method="post">
+                        <span class="authorization__login">Login</span>
+                        <div class="authorization__input" data-validate="Login is required">
+                            <input type="text" name="custom_username" placeholder="Login"/>
+                        </div>
+                        <div class="authorization__input" data-validate="Password is required">
+                            <input type="password" name="custom_password" placeholder="Password"/>
+                        </div>
+                        <div class="errors display-none">
+                            <span id="errorsText"></span>
+                        </div>
+                        <div class="authorization__buttons">
+                            <button class="authorization__button authorization__button--login" id="loginButton"
+                                    type="submit">
+                                Login
+                            </button>
+                            <a class="authorization__button authorization__button--register" id="registerButton"
+                                    th:href="@{/register}">
+                                Register
+                            </a>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

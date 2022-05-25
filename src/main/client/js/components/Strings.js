@@ -14,7 +14,8 @@ export const strings = {
         },
         forms: {
             submit: "Submit",
-            selectParent: "Select parent category"
+            selectParent: "Select parent category",
+            delete: "Delete"
         },
         home: "Home",
         language: "Language",
@@ -64,7 +65,8 @@ export const strings = {
         },
         forms: {
             submit: "Отправить",
-            selectParent: "Выберите родительскую категорию"
+            selectParent: "Выберите родительскую категорию",
+            delete: "Удалить"
         },
         home: "Главная",
         language: "Язык",

@@ -63,6 +63,7 @@ form{
     align-items: center;
     justify-content: center;
     margin-left: 10em;
+    width: fit-content;
 }
 
 .form__field{
@@ -387,7 +388,14 @@ input, select {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-right: 5em;
 }
+.head__person{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .profile__stat{
     display: flex;
     flex-direction: row;
@@ -763,9 +771,10 @@ table tr:last-child td {
     backdrop-filter: blur(4px);
 }
 
-/*.display-none{*/
-/*    display: none!important;*/
-/*}*/
+.display-none{
+    display: none!important;
+    opacity: 0;
+}
 
 .authorization{
     display: flex;
@@ -790,6 +799,8 @@ table tr:last-child td {
     width: 45%;
     border-radius: 1em;
     cursor: pointer;
+    color: black!important;
+    text-align: center;
 }
 
 .authorization__button--login{
@@ -798,4 +809,46 @@ table tr:last-child td {
 
 .authorization__button--register{
     background-color: #b6b33a;
+}
+.item__label--top{
+    margin-left: 0.5em;
+    width: auto;
+}
+.stat__item--top{
+    background-color: #287397;
+}
+
+.profile__stat--top{
+    margin-left: 0;
+    margin-right: 2em;
+}
+
+.content__add-form-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+.content__add-form-wrapper>*+*{
+    margin-left: 2em;
+}
+
+.delete-item-button{
+    transition: all .5s;
+    width: 1em;
+    opacity: 1;
+    transform: translateX(0px);
+    cursor: pointer;
+    position: absolute;
+    padding-left: .5em;
+}
+
+.delete-item-button>img{
+    width: 1em;
+}
+
+.delete-item-button--hidden{
+    opacity: 0;
+    transform: translateX(20px);
 }

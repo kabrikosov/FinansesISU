@@ -9,10 +9,11 @@
     <div class="menu">
         <div class="menu__head">
             <h2 th:text="|#{add} #{subscriptions}|"></h2>
+            <div th:replace="home :: head-profile"/>
         </div>
         <div class="menu__content">
             <div class="content__add-form">
-                <form action="/subscriptions/add" method="post" th:object="${subscription}">
+                <form th:action="@{/subscriptions/add}" method="post" th:object="${subscription}">
                     <div class="form__field">
                         <label for="name" th:text="#{model.name}"></label>
                         <input id="name" type="text" th:field="${subscription.name}">
