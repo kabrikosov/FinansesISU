@@ -61,11 +61,14 @@ public class SubscriptionController {
             @Valid @ModelAttribute("subscription") Subscription subscription,
             Errors errors,
             Model model,
-            RedirectAttributes attr){
+            RedirectAttributes attr,
+            @AuthenticationPrincipal User user){
         if (errors.hasErrors()){
+            subscription.setUser(user);
             model.addAttribute("subscription", subscription);
             return "add_subscription";
         }else{
+            subscription.setUser(user);
             repository.save(subscription);
             attr.addFlashAttribute("subscription", subscription);
             return "redirect:/subscriptions/subscription";
@@ -73,12 +76,12 @@ public class SubscriptionController {
     }
 
     @RequestMapping("/subscription")
-    public String showNewCategory(
+    public String showNewSubscription(
             @ModelAttribute("subscription") Subscription s,
             Model model) throws Exception {
         if (s.getId()!=null){
-            model.addAttribute("subscription", s);
-            return "subscription";
+//            model.addAttribute("subscription", s);
+            return "redirect:/subscriptions";
         }else{
             throw new Exception("Error subscription id");
         }

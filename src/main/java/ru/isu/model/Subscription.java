@@ -37,6 +37,6 @@ public class Subscription implements DateToStringConvertable {
         this.startDateTime = LocalDateTime.now();
     }
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private User user;
 }

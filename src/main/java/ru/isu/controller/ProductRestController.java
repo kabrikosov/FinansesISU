@@ -1,6 +1,8 @@
 package ru.isu.controller;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
@@ -42,8 +44,28 @@ public class ProductRestController {
         return repository.save(product);
     }
 
-    @PostMapping(value = "/try")
-    public void emptyMethod(){
+    @RequestMapping(value = "{oldProduct}/put", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
+    public Product updateProduct(@RequestBody Product newproduct, @PathVariable Product oldProduct) {
+        oldProduct.setCategory(newproduct.getCategory());
+        oldProduct.setDate(newproduct.getDate());
+        oldProduct.setPrice(newproduct.getPrice());
+        oldProduct.setQuantity(newproduct.getQuantity());
+        oldProduct.setName(newproduct.getName());
+        oldProduct.setSubscription(newproduct.getSubscription());
+        return repository.save(oldProduct);
+    }
+
+    @DeleteMapping("/{product}/delete")
+    public ResponseEntity<HttpStatus> deleteProduct(@PathVariable Product product){
+        repository.delete(product);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{product}/detachSubscription")
+    public ResponseEntity<HttpStatus> detachSubscription(@PathVariable Product product){
+        product.setSubscription(null);
+        repository.save(product);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{product}")

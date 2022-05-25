@@ -41,5 +41,16 @@ public class CategoryRestController {
     public ResponseEntity<Category> addCategory(@RequestBody Category category, @AuthenticationPrincipal User user){
         return new ResponseEntity<Category>(repository.save(category), HttpStatus.OK);
     }
+    @PutMapping("/put")
+    public Category updateCategory(@RequestBody Category category) {
+        return repository.save(category);
+    }
+
+    @DeleteMapping("/{category}/delete")
+    public ResponseEntity<HttpStatus> deleteCategory(@PathVariable Category category){
+        repository.delete(category);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 }
