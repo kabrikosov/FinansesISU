@@ -26,24 +26,26 @@ export function ProductsTable(props) {
         <div className="productsTable">
             <table>
                 <thead>
-                    <tr>
-                        <td>Name</td>
-                        <td>Price</td>
-                        <td>Quantity</td>
-                        <td>Sum</td>
-                        <td>Date</td>
-                        <td>Category</td>
-                    </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>Price</td>
+                    <td>Quantity</td>
+                    <td>Sum</td>
+                    <td>Date</td>
+                    <td>Category</td>
+                </tr>
                 </thead>
                 <tbody>
-                    {data.current.map(el => <tr>
-                        <td>{el?.name}</td>
+                {data.current.map(el =>
+                    <tr>
+                        <td><a href={window.location.origin + "/products/" + el?.id}>{el?.name}</a></td>
                         <td>{el?.price}</td>
                         <td>{el?.quantity}</td>
                         <td>{el?.price * el?.quantity}</td>
                         <td>{new Date(el?.date).toLocaleDateString(lang)}</td>
                         <td>{el?.category?.name}</td>
-                    </tr>)}
+                    </tr>
+                )}
                 </tbody>
             </table>
         </div>

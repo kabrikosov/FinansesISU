@@ -1,5 +1,7 @@
 package ru.isu.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +27,7 @@ public class Subscription implements DateToStringConvertable {
     private String name;
 
     @OneToMany(mappedBy = "subscription", fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Product> products;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
@@ -36,4 +39,8 @@ public class Subscription implements DateToStringConvertable {
     public Subscription() {
         this.startDateTime = LocalDateTime.now();
     }
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JsonBackReference
+    private User user;
 }

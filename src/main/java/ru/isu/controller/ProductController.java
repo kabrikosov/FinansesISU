@@ -1,6 +1,9 @@
 package ru.isu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -10,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.isu.model.Category;
 import ru.isu.model.Product;
+import ru.isu.model.User;
 import ru.isu.repository.CategoryRepository;
 import ru.isu.repository.ProductRepository;
 import ru.isu.repository.SubscriptionRepository;
@@ -36,8 +40,9 @@ public class ProductController {
 
     @GetMapping(value = {"/all", ""})
     public ModelAndView viewAll(){
+        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var mv = new ModelAndView("all_products");
-        mv.addObject("productList", repository.findAll());
+        mv.addObject("productList", repository.findAllByUser(user));
         return mv;
     }
 
@@ -51,9 +56,12 @@ public class ProductController {
     @GetMapping("/add")
     public ModelAndView add(){
         var mv = new ModelAndView("add_product");
-        mv.addObject("product", new Product());
+        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var p = new Product();
+        p.setUser(user);
+        mv.addObject("product", p);
         mv.addObject("categories", categoryRepository.findAll());
-        mv.addObject("subscriptions", subscriptionRepository.findAll());
+        mv.addObject("subscriptions", subscriptionRepository.findAllByUser(user));
         return mv;
     }
 
@@ -76,7 +84,7 @@ public class ProductController {
     @RequestMapping(value = "/product")
     public String showNewProduct(
             @ModelAttribute("product") Product p,
-            Model model) throws Exception {
+            Model model, @AuthenticationPrincipal User user) throws Exception {
         if (p.getId()!=null){
             model.addAttribute("product", p);
             return "product";

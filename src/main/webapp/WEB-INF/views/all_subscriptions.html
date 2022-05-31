@@ -8,10 +8,18 @@
     <div th:replace="../views/header :: navigation"></div>
     <div class="menu">
         <div class="menu__head">
-            <h1 th:text=" #{subscriptions}"></h1>
+            <h2 th:text=" #{subscriptions}"></h2>
+            <div th:replace="home :: head-profile"/>
         </div>
         <div class="menu__content">
             <div id="app" class="menu__content__wrapper"></div>
+            <table>
+                <tr th:each="sub : ${subscriptionList}">
+                    <td><a th:href="@{/subscriptions/{id}(id=${sub.id})}" th:text="${sub.name}"></a></td>
+                    <td th:text="${sub.startDateTime}"></td>
+                    <td th:text="${sub.expirationDateTime}"></td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

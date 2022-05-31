@@ -2,6 +2,8 @@ package ru.isu.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,6 +39,9 @@ public class Product implements DateToStringConvertable {
     @JoinColumn(name = "subscription_id")
     @JsonBackReference
     private Subscription subscription;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    private User user;
 
     public Product() {
         this.date = LocalDateTime.now();

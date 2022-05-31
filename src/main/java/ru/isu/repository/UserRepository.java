@@ -7,5 +7,5 @@ import ru.isu.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    User findUserByLogin(String name);
+    User findUserByUsername(String username);
 }

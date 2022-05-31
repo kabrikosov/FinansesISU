@@ -1,14 +1,32 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head th:replace="../views/header :: head"/>
-<body>
+<body sec:authorize="isAuthenticated()">
 <div class="wrapper">
     <div th:replace="../views/header :: navigation"></div>
     <div class="menu">
         <div class="menu__head">
-            <h1 th:text=" #{home}"></h1>
+            <h2 th:text=" #{home}"></h2>
+            <div class="head__profile" th:fragment="head-profile">
+                <div class="profile__stat profile__stat--top">
+                    <div class="stat__item stat__item--top">
+                        <a sec:authorize="isAnonymous()" class="item__label item__label--top" th:href="@{/login}">Login</a>
+                        <a sec:authorize="isAuthenticated()" class="item__label item__label--top" onclick="{document.getElementById('logout-form').submit()}">Logout</a>
+                        <form id="logout-form" class="display-none" th:action="@{/logout}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        </form>
+                    </div>
+                </div>
+                <div class="head__person">
+                    <img alt="#" th:src="@{/resources/img/avatar.svg}">
+                    <div class="person__status">
+                        <span class="status__name" sec:authentication="name"></span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="menu__content">
             <div id="app" class="menu__content__wrapper"></div>

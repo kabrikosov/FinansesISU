@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="../views/header :: head"/>
+<body>
+<div class="wrapper">
+    <div th:replace="../views/header :: navigation"></div>
+    <div class="menu">
+        <div class="menu__head">
+            <h2 th:text=" #{register}"></h2>
+            <div th:replace="home :: head-profile"/>
+        </div>
+        <div class="menu__content">
+            <div class="menu__content__wrapper">
+                <div class="authorization_overlay">
+                    <div class="authorization">
+                        <span class="authorization__login">Register</span>
+                        <form method="post" th:action="@{/register}">
+                            <div class="authorization__input" data-validate="First Name is required">
+                                <input type="text" name="firstName" placeholder="First Name"/>
+                            </div>
+                            <div class="authorization__input" data-validate="Last Name is required">
+                                <input type="text" name="lastName" placeholder="Last Name"/>
+                            </div>
+                            <div class="authorization__input" data-validate="Login is required">
+                                <input type="text" name="username" placeholder="Login" />
+                            </div>
+                            <div class="authorization__input">
+                                <input type="number" name="monthlyIncome" placeholder="Monthly income" />
+                            </div>
+                            <div class="authorization__input">
+                                <input type="number" name="cashAvailable" placeholder="Cash available" />
+                            </div>
+                            <div class="errors display-none">
+                                <span id="errorsText"></span>
+                            </div>
+                            <div class="authorization__input" data-validate="Password is required">
+                                <input type="password" name="password" placeholder="Password" />
+                            </div>
+                            <div class="authorization__buttons">
+                                <a class="authorization__button authorization__button--login" id="loginButton"
+                                        th:href="@{/login}">
+                                    Login
+                                </a>
+                                <button class="authorization__button authorization__button--register" id="registerButton"
+                                        type="submit">
+                                    Register
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
